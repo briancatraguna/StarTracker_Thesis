@@ -1,0 +1,4 @@
+So this program tries to find an image from inside a folder containing a catalogue of images that matches a test image.
+Since my thesis is dealing about star tracker which essentially involves finding matches also in the star tracker I decided to make this little program.
+The test image is can be found in this folder called croppedstar.img
+The catalogue is every image inside the folder "Random Stars"
