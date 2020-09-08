@@ -1,0 +1,10 @@
+One of the ways to optimize the matching algorithm is to use machine learning.
+Deep learning is a part of machine learning that basically involves the use of neural networks.
+Convolutional neural network is a neural network model that is good for image recognition processes.
+This program will teach itself the types of different clothing types by giving them datasets.
+This is called supervised learning where the program is given a data set that has labels on each image.
+The convolutional network will then try to classify these different types of clothing types.
+The goal of the program is to be able to recognize these clothing types and detect it by the webcam.
+This program is just for practice, by making a simple CNN so that later can be applied to star tracking applications.
+Hopefully this program will give me an experience of making a deep learning model, especially recognizing objects live on camera.
+Because later in the star tracking process, it will be used to generate live attitude data of the satellite.
