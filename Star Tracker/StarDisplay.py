@@ -29,8 +29,9 @@ ra_convert = np.round(reMap(ra,min(ra),max(ra),0,1280))
 ra_convert = ra_convert.astype(int)
 de_convert = np.round(reMap(de,min(de),max(de),0,720))
 de_convert = de_convert.astype(int)
+ma_convert = reMap(ma,min(ma),max(ma),0,255)
 
 for i in star_id:
-        cv2.circle(image,(ra_convert[i],de_convert[i]),1,(255,255,255),-1)
+        cv2.circle(image,(ra_convert[i],de_convert[i]),1,ma_convert[i],-1)
 
 displayImg(image,cmap='gray')
