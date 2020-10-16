@@ -22,7 +22,24 @@ for filename in os.listdir(path):
 
 #Saving the default image to a directory
 for index,image in enumerate(dataset):
-    displayImg(image)
     path = 'C:/PythonPrograms/GitClones/CodingProgressforThesis/Star Tracker/dataset/'+str(index)+'/'
     file_name = str(index)+'_000.jpg'
     cv2.imwrite(path+file_name,image)
+
+test_image = cv2.imread('C:/PythonPrograms/GitClones/CodingProgressforThesis/Star Tracker/dataset/0/0_000.jpg')
+displayImg(test_image)
+#Preprocessing
+#Generate random blur
+# for i in range(1,10):
+#     blur = cv2.blur(test_image,ksize=(i,i))
+#     displayImg(blur)
+
+for i in range(1,10):
+    kernel = np.ones(shape=(2,2),dtype=np.float32)/i
+    destination = cv2.filter2D(test_image,-1,kernel)
+    displayImg(destination)
+#Generate random noise
+
+#Generate random morphological operations
+
+#Generate random filters
