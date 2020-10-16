@@ -21,7 +21,7 @@ for filename in os.listdir(path):
         dataset.append(new_img)
 
 #Saving the default image to a directory
-for image in dataset:
+for index,image in enumerate(dataset):
     path = 'C:/PythonPrograms/GitClones/CodingProgressforThesis/Star Tracker/dataset/'+str(index)+'/'
     file_name = '0.jpg'
     cv2.imwrite(path+file_name,image)
