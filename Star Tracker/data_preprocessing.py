@@ -69,11 +69,11 @@ for folder in os.listdir(path):
         gray_img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         for i in range(2,10,2):
             ksize=(i,i)
-            blurredimg = cv2.blur(testimg,ksize)
+            blurredimg = cv2.blur(gray_img,ksize)
             count+=1
             cv2.imwrite(path+folder+'/'+str(count)+'.jpg',blurredimg)
         for i in range(9,12,1):
-            kernel = np.array([[-1,-1,-1], [-1,10,-1], [-1,-1,-1]])
-            sharpen = cv2.filter2D(testimg,-1,kernel)
+            kernel = np.array([[-1,-1,-1], [-1,i,-1], [-1,-1,-1]])
+            sharpen = cv2.filter2D(gray_img,-1,kernel)
             count+=1
             cv2.imwrite(path+folder+'/'+str(count)+'.jpg',sharpen)
