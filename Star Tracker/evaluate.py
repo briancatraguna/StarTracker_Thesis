@@ -36,3 +36,15 @@ def get_accuracy(predict_results,class_no):
             wrong+=1
     accuracy = right/(right+wrong)
     return accuracy
+
+results = []
+accuracy_list = []
+for i in range(8):
+    result = predict_class(i)
+    results.append(result)
+    accuracy = get_accuracy(results[i],i)
+    accuracy_list.append(accuracy)
+    print("The accuracy for class {} is: ".format(i),accuracy)
+
+ave_accuracy = sum(accuracy_list)/len(accuracy_list)
+print("Total accuracy: ",ave_accuracy)
