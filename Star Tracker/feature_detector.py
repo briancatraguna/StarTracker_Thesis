@@ -1,6 +1,7 @@
-#Import necessary libraries
+#Importing the necessary libraries
 import cv2
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 
 def displayImg(img,cmap='gray'):
@@ -10,10 +11,15 @@ def displayImg(img,cmap='gray'):
     plt.show()
 
 #Read image
-im = cv2.imread("dataset/train/0/0.jpg",0)
-displayImg(im)
+img = cv2.imread("dataset/train/0/0.jpg",0)
+ret,img = cv2.threshold(img,200,255,cv2.THRESH_BINARY)
+displayImg(img)
 
-#Set up the detector with default parameters
+#Find the center of the image
+y,x = img.shape
+coordinate = [y/2,x/2]
+
+#Set up the detector
 params = cv2.SimpleBlobDetector_Params()
 params.filterByInertia = False
 params.filterByConvexity = False
@@ -25,34 +31,24 @@ params.filterByArea = False
 params.minArea = 10000
 detector = cv2.SimpleBlobDetector_create(params)
 
-#Detect blobs
-path = "dataset/train/"
-for i in range(0,8):
-    if i == 2:
-        update_path = path+str(i)+"/"+str(i)+".jpg"
-        im = cv2.imread(update_path,0)
-        displayImg(im)
-        keypoints = detector.detect(im)
-        coordinates = []
-        for j in keypoints:
-            x = int(j.pt[0])
-            y = int(j.pt[0])
-            coord = [x,y]
-            coordinates.append(coord)
-        im_with_keypoints = cv2.drawKeypoints(im,keypoints,np.array([]),(0,0,255),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-        displayImg(im_with_keypoints)
-        print(coordinates)
-        continue
-    update_path = path+str(i)+"/"+"0.jpg"
-    im = cv2.imread(update_path,0)
-    displayImg(im)
-    keypoints = detector.detect(im)
-    coordinates = []
-    for j in keypoints:
-        x = int(j.pt[0])
-        y = int(j.pt[1])
-        coord = [x,y]
-        coordinates.append(coord)
-    im_with_keypoints = cv2.drawKeypoints(im,keypoints,np.array([]),(0,0,255),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    displayImg(im_with_keypoints)
-    print(coordinates)
+#Find the pivot point (Star closest to the center)
+i = 2
+while True:
+    croppedimg = img[y-i:y+i,x-i:x+i]
+    keypoints = detector.detect(croppedimg)
+    if keypoints:
+        displayImg(croppedimg)
+        x = int(keypoints[0].pt[0])
+        y = int(keypoints[0].pt[1])
+        break
+    i+=2
+
+#Extracting coordinates of center star
+keypoint = keypoints[0]
+x = int(keypoint.pt[0])
+y = int(keypoint.pt[1])
+print("COORDINATES: \n","x: ",x,"\n","y: ",y)
+center = (x,y)
+
+cv2.circle(img,center,15,[0,0,0],-1)
+displayImg(img)
