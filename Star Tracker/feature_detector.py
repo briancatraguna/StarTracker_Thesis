@@ -26,11 +26,33 @@ params.minArea = 10000
 detector = cv2.SimpleBlobDetector_create(params)
 
 #Detect blobs
-keypoints = detector.detect(im)
-
-#Draw detected blobs as red circles
-#cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
-im_with_keypoints = cv2.drawKeypoints(im,keypoints,np.array([]),(0,0,255),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-
-#Show keypoints
-displayImg(im_with_keypoints)
+path = "dataset/train/"
+for i in range(0,8):
+    if i == 2:
+        update_path = path+str(i)+"/"+str(i)+".jpg"
+        im = cv2.imread(update_path,0)
+        displayImg(im)
+        keypoints = detector.detect(im)
+        coordinates = []
+        for j in keypoints:
+            x = int(j.pt[0])
+            y = int(j.pt[0])
+            coord = [x,y]
+            coordinates.append(coord)
+        im_with_keypoints = cv2.drawKeypoints(im,keypoints,np.array([]),(0,0,255),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        displayImg(im_with_keypoints)
+        print(coordinates)
+        continue
+    update_path = path+str(i)+"/"+"0.jpg"
+    im = cv2.imread(update_path,0)
+    displayImg(im)
+    keypoints = detector.detect(im)
+    coordinates = []
+    for j in keypoints:
+        x = int(j.pt[0])
+        y = int(j.pt[1])
+        coord = [x,y]
+        coordinates.append(coord)
+    im_with_keypoints = cv2.drawKeypoints(im,keypoints,np.array([]),(0,0,255),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    displayImg(im_with_keypoints)
+    print(coordinates)
