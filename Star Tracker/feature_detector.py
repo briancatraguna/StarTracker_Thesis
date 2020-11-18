@@ -11,13 +11,14 @@ def displayImg(img,cmap='gray'):
     plt.show()
 
 #Read image
-img = cv2.imread("dataset/train/0/0.jpg",0)
+img = cv2.imread("dataset/train/0/0.jpg")
 ret,img = cv2.threshold(img,200,255,cv2.THRESH_BINARY)
-displayImg(img)
 
 #Find the center of the image
-y,x = img.shape
-coordinate = [y/2,x/2]
+height,width,col = img.shape
+coordinate = [height/2,width/2]
+y = int(coordinate[0])
+x = int(coordinate[1])
 
 #Set up the detector
 params = cv2.SimpleBlobDetector_Params()
@@ -33,22 +34,25 @@ detector = cv2.SimpleBlobDetector_create(params)
 
 #Find the pivot point (Star closest to the center)
 i = 2
+stars_coordinate = []
 while True:
-    croppedimg = img[y-i:y+i,x-i:x+i]
+    croppedimg = img[y-i:y+i,x-i:x+i,:]
+    y_crop,x_crop,col = croppedimg.shape
     keypoints = detector.detect(croppedimg)
-    if keypoints:
-        displayImg(croppedimg)
-        x = int(keypoints[0].pt[0])
-        y = int(keypoints[0].pt[1])
+    if len(keypoints) == 3:
+        for index,keypoint in enumerate(keypoints):
+            x_centralstar_crop = int(keypoints[index].pt[0])
+            y_centralstar_crop = int(keypoints[index].pt[1])
+            coord_x_centralstar = int(x_centralstar_crop + (width-x_crop)/2)
+            coord_y_centralstar = int(y_centralstar_crop + (height-y_crop)/2)
+            stars_coordinate.append([coord_x_centralstar,coord_y_centralstar])
+            print("COORDINATES: \n","x: ",coord_x_centralstar,"\n","y: ",coord_y_centralstar)
         break
     i+=2
 
 #Extracting coordinates of center star
-keypoint = keypoints[0]
-x = int(keypoint.pt[0])
-y = int(keypoint.pt[1])
-print("COORDINATES: \n","x: ",x,"\n","y: ",y)
-center = (x,y)
+for coord in stars_coordinate:
+    center = (coord[0],coord[1])
+    cv2.circle(img,center,2,(255,0,0),2)
 
-cv2.circle(img,center,15,[0,0,0],-1)
 displayImg(img)
