@@ -11,11 +11,10 @@ def displayImg(img,cmap='gray'):
     plt.show()
 
 #Read image
-path = "dataset/train/7/0.jpg"
 def detect_feature(path):
     img = cv2.imread(path)   
-    ret,img = cv2.threshold(img,200,255,cv2.THRESH_BINARY)
-    displayImg(img)
+    print("ORIGINAL SHAPE: ",img.shape)
+    print(type(img))
 
     #Find the center of the image
     height,width,col = img.shape
@@ -27,34 +26,49 @@ def detect_feature(path):
     params = cv2.SimpleBlobDetector_Params()
     params.filterByInertia = False
     params.filterByConvexity = False
-    params.minThreshold = 120
-    params.maxThreshold = 200
+    params.minThreshold = 50
+    params.maxThreshold = 255
     params.filterByColor = True
     params.blobColor = 255
     params.filterByArea = False
-    params.minArea = 10000
+    params.minArea = 1
     detector = cv2.SimpleBlobDetector_create(params)
 
     #Find the pivot point (Star closest to the center)
     i = 2
     stars_coordinate = []
     while True:
-        croppedimg = img[y-i:y+i,x-i:x+i,:]
+        top = y-i
+        down = y+i
+        vertical = abs(top-down)
+        if vertical >= height:
+            new_i = height/2
+            top = int(round(y-new_i))
+            down = int(round(y+new_i))
+        left = x-i
+        right = x+i
+        horizontal = abs(left-right)
+        if horizontal >= width:
+            new_i = width/2
+            left = int(round(x-new_i))
+            right =int(round(x+new_i))
+        croppedimg = img[top:down,left:right,:]
         y_crop,x_crop,col = croppedimg.shape
         keypoints = detector.detect(croppedimg)
-        if len(keypoints) == 4:
+        print(len(keypoints))
+        if len(keypoints) > 3:
             print("Cropped size: \nx: {}\ny: {}".format(x_crop,y_crop))
             print("Full size: \nx: {}\ny: {}".format(width,height))
             for index,keypoint in enumerate(keypoints):
-                x_centralstar_crop = int(keypoints[index].pt[0])
-                y_centralstar_crop = int(keypoints[index].pt[1])
+                x_centralstar_crop = int(round(keypoints[index].pt[0]))
+                y_centralstar_crop = int(round(keypoints[index].pt[1]))
                 print("Crop Coordinates: \nx: {}\ny: {}".format(x_centralstar_crop,y_centralstar_crop))
-                coord_x_centralstar = int(x_centralstar_crop + (width-x_crop)/2)
-                coord_y_centralstar = int(y_centralstar_crop + (height-y_crop)/2)
+                coord_x_centralstar = int(round(x_centralstar_crop + ((width-x_crop)/2)))
+                coord_y_centralstar = int(round(y_centralstar_crop + ((height-y_crop)/2)))
                 stars_coordinate.append([coord_x_centralstar,coord_y_centralstar])
                 print("COORDINATES: \n","x: ",coord_x_centralstar,"\n","y: ",coord_y_centralstar)
             break
-        i+=10
+        i+=2
 
     #Draw circles on important stars and find the pivot star
     dist_to_center = []
@@ -76,5 +90,10 @@ def detect_feature(path):
 
     return img
 
-final_img = detect_feature(path)
-displayImg(final_img)
+for image_index in range(8):
+    path = 'dataset_with_features/'+str(image_index)+'/'
+    for index,i in enumerate(np.arange(0,360,0.1)):
+        image = path+str(index)+'.jpg'
+        print(image)
+        final_img = detect_feature(image)
+        cv2.imwrite(image,final_img)
