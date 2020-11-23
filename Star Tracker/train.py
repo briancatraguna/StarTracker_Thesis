@@ -11,7 +11,7 @@ train_datagen = ImageDataGenerator(
     horizontal_flip=True
 )
 training_set = train_datagen.flow_from_directory(
-    'C:/PythonPrograms/GitClones/CodingProgressforThesis/Star Tracker/dataset/train',
+    'dataset_with_features/train',
     target_size=(64,64),
     batch_size=32,
     class_mode='categorical'
@@ -20,7 +20,7 @@ training_set = train_datagen.flow_from_directory(
 #TEST
 test_datagen = ImageDataGenerator(rescale=1./255)
 test_set = test_datagen.flow_from_directory(
-    'C:/PythonPrograms/GitClones/CodingProgressforThesis/Star Tracker/dataset/test',
+    'dataset_with_features/test',
     target_size=(64,64),
     batch_size=32,
     class_mode='categorical'
@@ -55,81 +55,4 @@ cnn.compile(loss='categorical_crossentropy',optimizer='rmsprop',metrics=['accura
 cnn.fit(x=training_set,validation_data=test_set,epochs=15)
 
 #SAVING THE MODEL
-cnn.save('C:\PythonPrograms\Deep Learning Models\Trained_Mini_StarTracker.h5')
-
-#MAKING A SINGLE PREDICTION
-import numpy as np
-from keras.preprocessing import image
-#First class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/0/1807.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(training_set.class_indices)
-print(result)
-#Second class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/1/603.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(result)
-#Third class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/2/1116.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(result)
-#Fourth class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/3/1255.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(result)
-#Fifth class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/4/2012.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(result)
-#Sixth class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/5/863.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(result)
-#Seventh class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/6/1794.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(result)
-#Eight class
-test_image = image.load_img(
-    'C:/PythonPrograms\GitClones/CodingProgressforThesis/Star Tracker/dataset/test/7/549.jpg',
-    target_size=(64,64)
-    )
-test_image = image.img_to_array(test_image)
-test_image = np.expand_dims(test_image,axis=0)
-result = cnn.predict(test_image)
-print(result)
+cnn.save('C:\PythonPrograms\Deep Learning Models\preprocessed_features_model.h5')

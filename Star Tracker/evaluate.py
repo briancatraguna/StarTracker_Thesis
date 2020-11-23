@@ -1,6 +1,6 @@
 #Load model
 from keras.models import load_model
-model = load_model('C:/PythonPrograms/GitClones/StarTracker_Thesis/Star Tracker/Trained_Mini_StarTracker.h5')
+model = load_model('C:/PythonPrograms/Deep Learning Models/preprocessed_features_model.h5')
 
 #Predict function
 import os
@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from keras.preprocessing import image
 
 def predict_class(class_no):
-    directory = 'C:/PythonPrograms/GitClones/StarTracker_Thesis/Star Tracker/dataset/test/'
+    directory = 'dataset_with_features/test/'
     class_no = str(class_no)+'/'
     path = os.path.join(directory,class_no)
     predict_results = []
@@ -20,6 +20,7 @@ def predict_class(class_no):
             target_size=(64,64)
             )
         test_image = image.img_to_array(test_image)
+        test_image = test_image/test_image.max()
         test_image = np.expand_dims(test_image,axis=0)
         result = model.predict(test_image)
         result = result.reshape(8)

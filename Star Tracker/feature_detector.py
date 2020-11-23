@@ -89,11 +89,3 @@ def detect_feature(path):
         cv2.line(img,pivot_star_coord,tuple(coord),(255,0,0),2)
 
     return img
-
-for image_index in range(8):
-    path = 'dataset_with_features/'+str(image_index)+'/'
-    for index,i in enumerate(np.arange(0,360,0.1)):
-        image = path+str(index)+'.jpg'
-        print(image)
-        final_img = detect_feature(image)
-        cv2.imwrite(image,final_img)
