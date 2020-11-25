@@ -11,15 +11,6 @@ from keras.preprocessing import image
 import time
 from keras import backend as K
 
-inp = model.input                                           # input placeholder
-outputs = [layer.output for layer in model.layers]          # all layer outputs
-functors = [K.function([inp, K.learning_phase()], [out]) for out in outputs]    # evaluation functions
-
-# Testing
-test = np.random.random(input_shape)[np.newaxis,...]
-layer_outs = [func([test, 1.]) for func in functors]
-print(layer_outs)
-
 def predict_class(class_no):
     directory = 'dataset_for_net_algo/test/'
     class_no = str(class_no)+'/'
@@ -46,13 +37,20 @@ def predict_class(class_no):
 def get_accuracy(predict_results,class_no):
     right = 0
     wrong = 0
+    not_fully_confident = 0
     for result in predict_results:
         if result[class_no] == 1:
             right+=1
         else:
             wrong+=1
+        for neuron in result:
+            if neuron == 1:
+                continue
+            elif neuron != 0:
+                not_fully_confident+=1
+                break
     accuracy = right/(right+wrong)
-    return accuracy
+    return accuracy,not_fully_confident
 
 results = []
 accuracy_list = []
@@ -61,9 +59,10 @@ for i in range(8):
     result,time_perclass = predict_class(i)
     results.append(result)
     time_ave.append(sum(time_perclass)/3600)
-    accuracy = get_accuracy(results[i],i)
+    accuracy,confidence_number = get_accuracy(results[i],i)
     accuracy_list.append(accuracy)
     print("The accuracy for class {} is: ".format(i),accuracy)
+    print("There are {} predictions that are not 100 percent confident".format(confidence_number))
 
 ave_accuracy = sum(accuracy_list)/len(accuracy_list)
 ave_time = sum(time_ave)/len(time_ave)
