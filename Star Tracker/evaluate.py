@@ -62,7 +62,7 @@ for i in range(8):
     accuracy,confidence_number = get_accuracy(results[i],i)
     accuracy_list.append(accuracy)
     print("The accuracy for class {} is: ".format(i),accuracy)
-    print("There are {} predictions that are not 100 percent confident".format(confidence_number))
+    print("There are {} predictions that are not 100 percent confident".format(confid))
 
 ave_accuracy = sum(accuracy_list)/len(accuracy_list)
 ave_time = sum(time_ave)/len(time_ave)
