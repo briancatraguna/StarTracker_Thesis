@@ -1,5 +1,5 @@
 # Thesis Project
-## Development of Star Pattern Recognition System using Convolutional Neural Networks
+## Development of Neural-Network based Star Identification System
 
 ### What's in this repo?
 1. My first project using the built in matching method from OpenCV Brute Force Matching with SIFT Descriptors and Ratio Test.
