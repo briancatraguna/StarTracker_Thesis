@@ -36,7 +36,7 @@ def net_feature(path,n):
     params.minArea = 1
     detector = cv2.SimpleBlobDetector_create(params)
 
-    #Find the pivot point (Star closest to the center)
+    #Detect stars
     keypoints = detector.detect(img)
     coord = []
     for index,keypoint in enumerate(keypoints):
@@ -60,8 +60,9 @@ def net_feature(path,n):
 
     return img
 
+
 #Multitriangles Algorithm
-def multitriangles_detector(path):
+def multitriangles_detector(path,n):
     img = cv2.imread(path)  
 
     #Find the center of the image
@@ -83,45 +84,23 @@ def multitriangles_detector(path):
     detector = cv2.SimpleBlobDetector_create(params)
 
     #Find the pivot point (Star closest to the center)
-    i = 2
-    stars_coordinate = []
-    while True:
-        top = y-i
-        down = y+i
-        vertical = abs(top-down)
-        if vertical >= height:
-            new_i = height/2
-            top = int(round(y-new_i))
-            down = int(round(y+new_i))
-        left = x-i
-        right = x+i
-        horizontal = abs(left-right)
-        if horizontal >= width:
-            new_i = width/2
-            left = int(round(x-new_i))
-            right =int(round(x+new_i))
-        croppedimg = img[top:down,left:right,:]
-        y_crop,x_crop,col = croppedimg.shape
-        keypoints = detector.detect(croppedimg)
-        print(len(keypoints))
-        if len(keypoints) > 3:
-            print("Cropped size: \nx: {}\ny: {}".format(x_crop,y_crop))
-            print("Full size: \nx: {}\ny: {}".format(width,height))
-            for index,keypoint in enumerate(keypoints):
-                x_centralstar_crop = int(round(keypoints[index].pt[0]))
-                y_centralstar_crop = int(round(keypoints[index].pt[1]))
-                print("Crop Coordinates: \nx: {}\ny: {}".format(x_centralstar_crop,y_centralstar_crop))
-                coord_x_centralstar = int(round(x_centralstar_crop + ((width-x_crop)/2)))
-                coord_y_centralstar = int(round(y_centralstar_crop + ((height-y_crop)/2)))
-                stars_coordinate.append([coord_x_centralstar,coord_y_centralstar])
-                print("COORDINATES: \n","x: ",coord_x_centralstar,"\n","y: ",coord_y_centralstar)
-            break
-        i+=2
+    keypoints = detector.detect(img)
+    coord = []
+    for index,keypoint in enumerate(keypoints):
+        x_centralstar = int(round(keypoints[index].pt[0]))
+        y_centralstar = int(round(keypoints[index].pt[1]))
+        distance_to_center = sqrt(((x_centralstar-x)**2)+((y_centralstar-y)**2))
+        coord.append([x_centralstar,y_centralstar,distance_to_center])
+
+    coord = sorted(coord,key=itemgetter(2))
+    stars_coordinate = coord[:n]
+    for item in stars_coordinate:
+        cv2.circle(img,center=(item[0],item[1]),radius=2,color=(255,0,0),thickness=2)
 
     for coord in stars_coordinate:
-        coord = tuple(coord)
-        cv2.circle(img,coord,2,(255,0,0),-1)
+        coord = tuple(coord[0:2])
         for other_coord in stars_coordinate:
+            other_coord = tuple(other_coord[0:2])
             if other_coord == coord:
                 continue
             else:
@@ -201,4 +180,5 @@ def centroiding(path):
     
     return img
 
-displayImg(net_feature('dataset/train/0/0.jpg',3))
+displayImg(net_feature('dataset/train/0/0.jpg',4))
+displayImg(multitriangles_detector('dataset/train/0/0.jpg',4))
