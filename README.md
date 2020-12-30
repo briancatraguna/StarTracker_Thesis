@@ -19,10 +19,27 @@ spacecrafts.
 
 ### Install
 
+* install python3
 ```bash
-python somefile.py
-
+sudo apt install python3
 ```
+* install pip3
+```bash
+sudo apt install pip3
+```
+
+* install python dependencies
+
+### Run project
+
+* train
+```bash
+python3 file.py
+```
+
+Paper
+
+Region bola langit -> dipecah 20/30 -> raw search -> 1/2 cand -> true search Ardi algo
 
 ### Main Libraries Used
 * OpenCV <br/>
