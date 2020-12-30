@@ -17,6 +17,13 @@ satellites would be able to use this sensor as a means of attitude determination
 after it has been trained. In short, this is my attempt to mimic the human brain to produce accurate attitude determination system for
 spacecrafts.
 
+### Install
+
+```bash
+python somefile.py
+
+```
+
 ### Main Libraries Used
 * OpenCV <br/>
 ![OpenCV_Logo](https://user-images.githubusercontent.com/32363208/97399385-a94cdf00-191f-11eb-825c-4be7c90f9b3d.png)
