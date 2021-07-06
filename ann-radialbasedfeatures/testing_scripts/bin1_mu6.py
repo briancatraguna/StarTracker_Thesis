@@ -1,0 +1,47 @@
+from keras.models import load_model
+from numpy.lib.function_base import average
+import tensorflow
+
+#MODIFY MODEL
+my_model = load_model('model_bin1_mu6.h5')
+
+from module_dependencies.star_image_generator import Generator
+
+generator = Generator()
+catalogue = generator.catalogue.to_numpy()
+attitudes = catalogue[:,1:3]
+#MODIFY MISSING AND UNEXPECTED STAR
+missing_star = 6
+unexpected_star = 6
+
+images = []
+for i,attitude in enumerate(attitudes):
+    ra = attitude[0]
+    de = attitude[1]
+    image = generator.create_star_image(ra,de,0,missing_star,unexpected_star)
+    print("Creating data star {} of {}".format(i,len(attitudes)))
+    images.append(image)
+
+import time
+import numpy as np
+
+def scaling(features):
+    rescaled = []
+    max_val = sum(features)
+    for feature in features:
+        rescaled.append(feature/max_val)
+    return rescaled
+
+time_array = []
+#MODIFY BIN INCREMENT
+for i,image in enumerate(images):
+    print("Calculating attitude star {} of {}".format(i,len(images)))
+    t0 = time.perf_counter()
+    features = generator.extract_rb_features(1,image)
+    scaled_features = np.array([scaling(features)])
+    result = np.argmax(my_model.predict(scaled_features))
+    time_elapsed = time.perf_counter() - t0
+    time_array.append(time_elapsed)
+
+average_time = sum(time_array)/len(time_array)
+print(average_time)

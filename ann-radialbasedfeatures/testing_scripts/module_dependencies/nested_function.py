@@ -18,7 +18,7 @@ def displayImg(img,cmap='gray'):
     plt.show()
 
 
-def create_star_image(ra,de,roll,star_catalogue,missing_star=0,unexpected_star=0,noise_weight=0.2):
+def create_star_image(ra,de,roll,star_catalogue,missing_star=0,unexpected_star=0):
     """[summary]
 
     Args:
@@ -107,21 +107,6 @@ def create_star_image(ra,de,roll,star_catalogue,missing_star=0,unexpected_star=0
             color = int(round((mag/9)*(155)+100))
             cv2.circle(background,(x,y),radius,color,thickness=-1)
         return background
-
-    def add_noise(low,high,background,weight):
-        """[Adds noise to an image]
-
-        Args:
-            low ([int]): [lower threshold of the noise generated]
-            high ([int]): [maximum pixel value of the noise generated]
-            background ([numpy array]): [the image that is put noise on]
-            weight ([float]) : [the weight of the noise compared to the image]
-        """
-        row,col = np.shape(background)
-        background = background.astype(int)
-        noise = np.random.randint(low,high=high,size=(row,col))
-        noised_img = cv2.addWeighted(noise,weight,background,1.0-weight,0)
-        return noised_img
 
 
     #Right ascension, declination and roll
@@ -220,8 +205,5 @@ def create_star_image(ra,de,roll,star_catalogue,missing_star=0,unexpected_star=0
         random_y = random.randint(0,w)
         random_magnitude = random.randint(-1,6)
         background = draw_star(random_x,random_y,random_magnitude,False,background)
-
-    #Adding noise
-    background = add_noise(0,50,background,noise_weight)
 
     return background

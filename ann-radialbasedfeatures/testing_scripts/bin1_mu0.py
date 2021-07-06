@@ -2,13 +2,14 @@ from keras.models import load_model
 from numpy.lib.function_base import average
 import tensorflow
 
+#MODIFY MODEL
 my_model = load_model('model_bin1_mu0.h5')
 
 from module_dependencies.star_image_generator import Generator
 
 generator = Generator()
 catalogue = generator.catalogue.to_numpy()
-attitudes = catalogue[:,1:3]
+attitudes = catalogue[:100,1:3]
 #MODIFY MISSING AND UNEXPECTED STAR
 missing_star = 0
 unexpected_star = 0
