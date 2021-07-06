@@ -9,7 +9,7 @@ from module_dependencies.star_image_generator import Generator
 
 generator = Generator()
 catalogue = generator.catalogue.to_numpy()
-attitudes = catalogue[:,1:3]
+attitudes = catalogue[:30,1:3]
 #MODIFY MISSING AND UNEXPECTED STAR
 missing_star = 6
 unexpected_star = 6
