@@ -72,5 +72,5 @@ class Generator():
 
     #Create star image
     def create_star_image(self,ra,de,roll,missing_star,unexpected_star):
-        image = nf.create_star_image(ra,de,roll,self.catalogue,missing_star,unexpected_star,0.2)
+        image = nf.create_star_image(ra,de,roll,self.catalogue,missing_star,unexpected_star,0)
         return image
