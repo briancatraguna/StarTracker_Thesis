@@ -1,0 +1,2 @@
+from module_dependencies import star_image_generator
+from module_dependencies import nested_function

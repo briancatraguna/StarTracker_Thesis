@@ -1,5 +1,5 @@
+from module_dependencies import nested_function as nf
 import pandas as pd
-import nested_function as nf
 import numpy as np
 from math import degrees,sqrt,atan
 import cv2
@@ -74,8 +74,3 @@ class Generator():
     def create_star_image(self,ra,de,roll,missing_star,unexpected_star):
         image = nf.create_star_image(ra,de,roll,self.catalogue,missing_star,unexpected_star,0.2)
         return image
-
-generator = Generator()
-image = generator.create_star_image(0,0,0,0,0)
-features = generator.extract_rb_features(1,image)
-print(features)
