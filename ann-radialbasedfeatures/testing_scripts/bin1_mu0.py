@@ -3,45 +3,61 @@ from numpy.lib.function_base import average
 import tensorflow
 
 #MODIFY MODEL
-my_model = load_model('model_bin1_mu0.h5')
+my_model = load_model('testing_scripts/model_bin1_mu0.h5')
 
 from module_dependencies.star_image_generator import Generator
+from module_dependencies.filtering_module import Filter
+from module_dependencies.nested_function import displayImg
 
-generator = Generator()
-catalogue = generator.catalogue.to_numpy()
-attitudes = catalogue[:30,1:3]
-#MODIFY MISSING AND UNEXPECTED STAR
-missing_star = 0
-unexpected_star = 0
+#With filtering
+generator = Generator(6)
+star_image = generator.create_star_image(0,0,0,0,0)
+filter = Filter(star_image)
+filtered_image = filter.filter_image(4)
+filtered_features = generator.extract_rb_features(1,filtered_image)
+print(filtered_features)
 
-images = []
-for i,attitude in enumerate(attitudes):
-    ra = attitude[0]
-    de = attitude[1]
-    image = generator.create_star_image(ra,de,0,missing_star,unexpected_star)
-    print("Creating data star {} of {}".format(i,len(attitudes)))
-    images.append(image)
+#Without filtering
+generator = Generator(4)
+nonfiltered_image = generator.create_star_image(0,0,0,0,0)
+nonfiltered_features = generator.extract_rb_features(1,nonfiltered_image)
+print(nonfiltered_features)
 
-import time
-import numpy as np
 
-def scaling(features):
-    rescaled = []
-    max_val = sum(features)
-    for feature in features:
-        rescaled.append(feature/max_val)
-    return rescaled
+# catalogue = generator.catalogue.to_numpy()
+# attitudes = catalogue[:30,1:3]
+# #MODIFY MISSING AND UNEXPECTED STAR
+# missing_star = 0
+# unexpected_star = 0
 
-time_array = []
-#MODIFY BIN INCREMENT
-for i,image in enumerate(images):
-    print("Calculating attitude star {} of {}".format(i,len(images)))
-    t0 = time.perf_counter()
-    features = generator.extract_rb_features(1,image)
-    scaled_features = np.array([scaling(features)])
-    result = np.argmax(my_model.predict(scaled_features))
-    time_elapsed = time.perf_counter() - t0
-    time_array.append(time_elapsed)
+# images = []
+# for i,attitude in enumerate(attitudes):
+#     ra = attitude[0]
+#     de = attitude[1]
+#     image = generator.create_star_image(ra,de,0,missing_star,unexpected_star)
+#     print("Creating data star {} of {}".format(i,len(attitudes)))
+#     images.append(image)
 
-average_time = sum(time_array)/len(time_array)
-print(average_time)
+# import time
+# import numpy as np
+
+# def scaling(features):
+#     rescaled = []
+#     max_val = sum(features)
+#     for feature in features:
+#         rescaled.append(feature/max_val)
+#     return rescaled
+
+# time_array = []
+# #MODIFY BIN INCREMENT
+# for i,image in enumerate(images):
+#     print("Calculating attitude star {} of {}".format(i,len(images)))
+#     t0 = time.perf_counter()
+#     features = generator.extract_rb_features(1,image)
+#     scaled_features = np.array([scaling(features)])
+#     result = np.argmax(my_model.predict(scaled_features))
+#     time_elapsed = time.perf_counter() - t0
+#     time_array.append(time_elapsed)
+
+# average_time = sum(time_array)/len(time_array)
+# print(average_time)
