@@ -1,14 +1,15 @@
 from module_dependencies import nested_function as nf
 import pandas as pd
 import numpy as np
+import matplotlib as plt
 from math import degrees,sqrt,atan
 import cv2
 
 class Generator():
 
-    def __init__(self) -> None:
+    def __init__(self,magnitude) -> None:
         self.col_list = ["Star ID","RA","DE","Magnitude"]
-        self.catalogue = pd.read_csv('module_dependencies/Below_4.0_SAO.csv',usecols=self.col_list)
+        self.catalogue = pd.read_csv('testing_scripts/module_dependencies/Below_{}.0_SAO.csv'.format(magnitude),usecols=self.col_list)
 
     #Extract features function
     def extract_rb_features(self,bin_increment,image):
