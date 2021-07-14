@@ -1,6 +1,5 @@
 from keras.models import load_model
 from numpy.lib.function_base import average
-import tensorflow
 
 #MODIFY MODEL
 my_model = load_model('testing_scripts/model_bin1_mu0.h5')

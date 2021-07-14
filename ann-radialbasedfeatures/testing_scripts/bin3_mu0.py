@@ -1,13 +1,13 @@
 from keras.models import load_model
 from numpy.lib.function_base import average
-import tensorflow
 
 #MODIFY MODEL
-my_model = load_model('model_bin3_mu0.h5')
+my_model = load_model('testing_scripts/model_bin3_mu0.h5')
 
 from module_dependencies.star_image_generator import Generator
+from module_dependencies.filtering_module import Filter
 
-generator = Generator()
+generator = Generator(6)
 catalogue = generator.catalogue.to_numpy()
 attitudes = catalogue[:30,1:3]
 #MODIFY MISSING AND UNEXPECTED STAR
@@ -37,6 +37,8 @@ time_array = []
 for i,image in enumerate(images):
     print("Calculating attitude star {} of {}".format(i,len(images)))
     t0 = time.perf_counter()
+    filter = Filter(image)
+    filtered_image = filter.filter_image(4)
     features = generator.extract_rb_features(3,image)
     scaled_features = np.array([scaling(features)])
     result = np.argmax(my_model.predict(scaled_features))
