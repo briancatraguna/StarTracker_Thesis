@@ -7,7 +7,7 @@ from math import sqrt
 from operator import itemgetter
 
 def displayImg(img,cmap='gray'):
-    fig = plt.figure(figsize=(12,10))
+    fig = plt.figure(figsize=(8,6))
     ax = fig.add_subplot(111)
     ax.imshow(img,cmap)
     plt.show()
@@ -179,6 +179,3 @@ def centroiding(path):
         cv2.circle(img,center,2,(255,0,0),2)
     
     return img
-
-displayImg(net_feature('dataset/train/0/0.jpg',4))
-displayImg(multitriangles_detector('dataset/train/0/0.jpg',4))
