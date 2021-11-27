@@ -3,8 +3,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
+from random import randint, random
 
-def create_star_image(ra,de,roll,catalogue_path,f=0.00304,myu=1.12*(10**-6)):
+def create_star_image(ra,de,roll,false_star,missing_star,catalogue_path,f=0.00304,myu=1.12*(10**-6)):
     """[summary]
 
     Args:
@@ -174,12 +175,34 @@ def create_star_image(ra,de,roll,catalogue_path,f=0.00304,myu=1.12*(10**-6)):
 
     background = np.zeros((w,l))
 
+    missing_star_rand_index = []
+    for i in range(missing_star):
+        random_index = randint(0,len(pixel_coordinates))
+        random_coordinate = pixel_coordinates[random_index]
+        while random_coordinate[0] not in range(-410,410) or random_coordinate[1] not in range(-308,300):
+            random_index = randint(0,len(pixel_coordinates))
+            random_coordinate = pixel_coordinates[random_index]
+        chosen_random_index = pixel_coordinates.index(random_coordinate)
+        missing_star_rand_index.append(chosen_random_index)
+
     for i in range(len(filtered_magnitude)):
         x = round(l/2 + pixel_coordinates[i][0])
         y = round(w/2 - pixel_coordinates[i][1])
+        if (i in missing_star_rand_index):
+            continue
         background = draw_star(x,y,filtered_magnitude[i],False,background)
 
+    background = background[924:1540,1230:2050]
+
+    #Draw false star
+    for i in range(false_star):
+        
+        rand_x = randint(0,background.shape[0])
+        rand_y = randint(0,background.shape[1])
+        rand_mag = randint(3,6)
+        background = draw_star(rand_x,rand_y,rand_mag,False,background)
+        
     #Adding noise
     background = add_noise(0,50,background=background)
 
-    return background[924:1540,1230:2050]
+    return background
