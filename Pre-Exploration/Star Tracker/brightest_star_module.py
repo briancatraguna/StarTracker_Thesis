@@ -74,41 +74,19 @@ def net_feature(image,distance_to_center_filter_pixels,n):
         distance = sqrt((delta_x*delta_x)+(delta_y*delta_y))
         if (distance == 0):
             continue
-        if (x_relate == 141):
-            print("Delta X: ",delta_x)
-            print("Delta Y: ",delta_y)
-            print("Distance: ",distance)
         distances.append([distance,coordinate])
     
-    print("Pivot Coord: ",pivot_coord)
-    print("Before Sorted: ",distances)
-    print("\n\n")
     distances = sorted(distances ,key=lambda row:row[0])
-    print("After Sorted: ",distances)
-    print("\n\n")
     neighbor_stars = []
     for distance in distances:
         neighbor_stars.append(distance[1])
 
+    #Draw circle and line
     for i,star in enumerate(neighbor_stars):
         cv2.circle(img,center=(star[0],star[1]),radius=2,color=(255,0,0),thickness=2)
+        cv2.line(img,(pivot_coord[0],pivot_coord[1]),(star[0],star[1]),(255,0,0),2)
         if i == n-1:
             break
-        
-
-
-    # coord = sorted(coord,key=itemgetter(2))
-    # coord = coord[:n]
-    # for item in coord:
-    #     cv2.circle(img,center=(item[0],item[1]),radius=2,color=(255,0,0),thickness=2)
-
-    # pivot_star_coord = tuple(coord[0][0:2])
-    # del coord[0]
-
-    # #Draw lines from pivot point to other stars
-    # for coordinate in coord:
-    #     coordinate = coordinate[0:2]
-    #     cv2.line(img,pivot_star_coord,tuple(coordinate),(255,0,0),2)
 
     return img
 
