@@ -182,6 +182,3 @@ def multitriangle(image,distance_to_center_filter_pixels,n):
 # pixel_from_center_filter = 100
 # net_feature_img = multitriangle(img,pixel_from_center_filter,4)
 # displayImg(net_feature_img)
-
-img = create_star_image(180,0,0,0,1,'Pre-Exploration/Star Tracker/star_catalogue/Below_6.0_SAO.csv')
-displayImg(img)
