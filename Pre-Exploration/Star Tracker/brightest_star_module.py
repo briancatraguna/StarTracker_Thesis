@@ -3,10 +3,7 @@ from feature_detector import multitriangles_detector,net_feature,displayImg,cent
 from create_star_module import create_star_image
 import cv2
 import numpy as np
-import os
-import matplotlib.pyplot as plt
 from math import sqrt
-from operator import itemgetter
 
 #Net Algorithm
 def net_feature(image,distance_to_center_filter_pixels,n):
@@ -186,5 +183,5 @@ def multitriangle(image,distance_to_center_filter_pixels,n):
 # net_feature_img = multitriangle(img,pixel_from_center_filter,4)
 # displayImg(net_feature_img)
 
-img = create_star_image(0,0,0,0,1,'Pre-Exploration/Star Tracker/star_catalogue/Below_6.0_SAO.csv')
+img = create_star_image(180,0,0,0,1,'Pre-Exploration/Star Tracker/star_catalogue/Below_6.0_SAO.csv')
 displayImg(img)
